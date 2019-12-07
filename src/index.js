@@ -22,8 +22,7 @@ class Board extends React.Component {
 
   render() {
     const cols = [[]];
-    let y = 0;
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0, y = 0; i < 9; i++) {
       if (i % 3 === 0 && i !== 0) {
         y++;
         cols.push([]);
