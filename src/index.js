@@ -54,6 +54,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      asc: true,
     };
   }
 
@@ -73,7 +74,7 @@ class Game extends React.Component {
         coords: [row, col]
       }],
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
     });
   }
 
@@ -82,26 +83,29 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
+  }
 
+  sortMoves() {
+    this.setState({ asc: !this.state.asc });
   }
 
   render() {
-    const history = this.state.history;
+    const { history, asc } = this.state;
     const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const desc = move ?
+      const text = move ?
         'Go to move #' + move + ' (' + step.coords.join(':') + ')' :
         'Go to game start';
       return (
         <li key={move}>
-          <button onClick={(e) => {
+          <button onClick={e => {
             this.jumpTo(move);
-            const buttons = document.querySelectorAll('button');
+            const buttons = document.querySelectorAll('ol button');
             buttons.forEach(button => button.style = '');
             e.target.style.fontWeight = 'bold';
-          }}>{desc}</button>
+          }}>{text}</button>
         </li>
       );
     });
@@ -113,6 +117,21 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
+    let sorted, sortText;
+    if (asc) {
+      sorted = moves;
+      sortText = 'Sort desc';
+    } else {
+      sorted = moves.sort((a, b) => b.key - a.key);
+      sortText = 'Sort asc';
+    }      
+    const sort = <button
+      onClick={() => this.sortMoves()}
+      style={{marginLeft:'30px'}}
+      >
+        {sortText}
+      </button>;
+
     return (
       <div className="game">
         <div className="game-board">
@@ -123,7 +142,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ol>{sorted}</ol>
+          <div>{history.length > 1 && sort}</div>
         </div>
       </div>
     );
