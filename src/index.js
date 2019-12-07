@@ -49,6 +49,7 @@ class Game extends React.Component {
     this.state = {
       history: [{
         squares: Array(9).fill(null),
+        coords: null,
       }],
       stepNumber: 0,
       xIsNext: true,
@@ -63,8 +64,11 @@ class Game extends React.Component {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    const row = i<3 ? 1 : i<6 ? 2 : 3;
+    const col = i % 3 + 1;
     this.setState({
-      history: [...history, { squares: squares }],
+      history: [...history, { squares: squares,
+        coords: [row, col] }],
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     });
@@ -84,7 +88,7 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move :
+        'Go to move #' + move + ' (' + step.coords.join(':') + ')' :
         'Go to game start'; 
       return (
         <li key={move}>
