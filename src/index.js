@@ -79,6 +79,7 @@ class Game extends React.Component {
       stepNumber: step,
       xIsNext: (step % 2) === 0,
     });
+
   }
   
   render() {
@@ -92,7 +93,12 @@ class Game extends React.Component {
         'Go to game start'; 
       return (
         <li key={move}>
-          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          <button onClick={(e) => {
+            this.jumpTo(move);
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => button.style='');
+            e.target.style.fontWeight = 'bold';
+          }}>{desc}</button>
         </li>
       );  
     });
