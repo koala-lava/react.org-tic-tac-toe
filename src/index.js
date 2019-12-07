@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props) {
-    return (
-      <button className="square" onClick={props.onClick}>
-        {props.value}
-      </button>
-    );
+  return (
+    <button className="square" onClick={props.onClick}>
+      {props.value}
+    </button>
+  );
 }
 
 class Board extends React.Component {
@@ -21,23 +21,25 @@ class Board extends React.Component {
   }
 
   render() {
+    const cols = [[]];
+    let y = 0;
+    for (let i = 0; i < 9; i++) {
+      if (i % 3 === 0 && i !== 0) {
+        y++;
+        cols.push([]);
+      }
+      cols[y].push(this.renderSquare(i));
+    }
+    const rows = [];
+    for (let i = 0; i < 3; i++) {
+      rows.push(<div className="board-row">
+        {cols[i]}
+      </div>);
+    }
+
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {rows}
       </div>
     );
   }
@@ -64,11 +66,13 @@ class Game extends React.Component {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
-    const row = i<3 ? 1 : i<6 ? 2 : 3;
+    const row = i < 3 ? 1 : i < 6 ? 2 : 3;
     const col = i % 3 + 1;
     this.setState({
-      history: [...history, { squares: squares,
-        coords: [row, col] }],
+      history: [...history, {
+        squares: squares,
+        coords: [row, col]
+      }],
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext
     });
@@ -81,7 +85,7 @@ class Game extends React.Component {
     });
 
   }
-  
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
@@ -90,17 +94,17 @@ class Game extends React.Component {
     const moves = history.map((step, move) => {
       const desc = move ?
         'Go to move #' + move + ' (' + step.coords.join(':') + ')' :
-        'Go to game start'; 
+        'Go to game start';
       return (
         <li key={move}>
           <button onClick={(e) => {
             this.jumpTo(move);
             const buttons = document.querySelectorAll('button');
-            buttons.forEach(button => button.style='');
+            buttons.forEach(button => button.style = '');
             e.target.style.fontWeight = 'bold';
           }}>{desc}</button>
         </li>
-      );  
+      );
     });
 
     let status;
@@ -113,7 +117,7 @@ class Game extends React.Component {
     return (
       <div className="game">
         <div className="game-board">
-          <Board 
+          <Board
             squares={current.squares}
             onClick={(i) => this.handleClickOnSquare(i)}
           />
