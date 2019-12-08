@@ -26,9 +26,8 @@ export function calculateWinner(squares) {
   }
   const empty = squares.indexOf(null);
   if (empty != null && squares.indexOf(null, empty + 1) === -1) {
-    const test = squares.slice();
     let draw = false;
-    test[empty] = 'X';
+    squares[empty] = 'X';
     if (!calculate(test)) {
       draw = true;
     }

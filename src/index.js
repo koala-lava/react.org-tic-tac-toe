@@ -71,14 +71,15 @@ class Game extends React.Component {
   }
 
   handleClickOnSquare(i) {
-    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    const { stepNumber, xIsNext} = this.state;
+    const history = this.state.history.slice(0, stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     const {winner, draw} = calculateWinner(squares);
     if (winner || squares[i] || draw) {
       return;
     }
-    squares[i] = this.state.xIsNext ? 'X' : 'O';
+    squares[i] = xIsNext ? 'X' : 'O';
     const row = i < 3 ? 1 : i < 6 ? 2 : 3;
     const col = i % 3 + 1;
     this.setState({
@@ -87,7 +88,7 @@ class Game extends React.Component {
         coords: [row, col]
       }],
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext,
+      xIsNext: !xIsNext,
     });
   }
 
@@ -103,11 +104,11 @@ class Game extends React.Component {
   }
 
   render() {
-    const { history, asc } = this.state;
-    const current = history[this.state.stepNumber];
+    const { history, asc, stepNumber, xIsNext } = this.state;
+    const current = history[stepNumber];
     const { winner, winningLine, draw } = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       const text = move ?
         'Go to move #' + move + ' (' + step.coords.join(':') + ')' :
         'Go to game start';
@@ -129,22 +130,20 @@ class Game extends React.Component {
     } else if (draw) {
       status = 'Draw: No winner';
     } else {
-      status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+      status = 'Next player: ' + (xIsNext ? 'X' : 'O');
     }
 
-    let sorted, sortText;
+    let sortBtnText;
     if (asc) {
-      sorted = moves;
-      sortText = 'Sort desc';
+      sortBtnText = 'Sort desc';
     } else {
-      sorted = moves.sort((a, b) => b.key - a.key);
-      sortText = 'Sort asc';
+      moves = moves.sort((a, b) => b.key - a.key);
+      sortBtnText = 'Sort asc';
     }
-    const sort = <button
+    const sort = <button className="sort"
       onClick={() => this.sortMoves()}
-      style={{ marginLeft: '30px' }}
     >
-      {sortText}
+      {sortBtnText}
     </button>;
 
     return (
@@ -159,8 +158,8 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{sorted}</ol>
-          <div>{history.length > 1 && sort}</div>
+          <ol>{moves}</ol>
+          {history.length > 1 && sort}
         </div>
       </div>
     );
