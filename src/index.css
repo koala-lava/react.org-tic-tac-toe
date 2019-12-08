@@ -35,6 +35,10 @@ ol, ul {
   background-color: lime;
 }
 
+.square-draw {
+  background-color: #e6e196;
+}
+
 .square:focus {
   outline: none;
 }
