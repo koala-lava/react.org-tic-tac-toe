@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { calculateWinner } from './utils';
+import { calculateWinner, calculateDraw } from './utils';
 import './index.css';
 
 function Square(props) {
@@ -76,6 +76,7 @@ class Game extends React.Component {
     const current = history[history.length - 1];
     const squares = current.squares.slice();
     const {winner} = calculateWinner(squares);
+
     if (winner || squares[i]) {
       return;
     }
@@ -106,7 +107,8 @@ class Game extends React.Component {
   render() {
     const { history, asc, stepNumber, xIsNext } = this.state;
     const current = history[stepNumber];
-    const { winner, winningLine, draw } = calculateWinner(current.squares);
+    const { winner, winningLine } = calculateWinner(current.squares);
+    const { draw } = calculateDraw(current.squares);
 
     let moves = history.map((step, move) => {
       const text = move ?
