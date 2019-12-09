@@ -1,4 +1,4 @@
-import { calculateWinner } from './utils';
+import { calculateWinner, calculateDraw } from './utils';
 describe('Calculate winner', () => {
   it('calculates first winning row correctly for "X"', () => {
     const squares = ['X',  'X',  'X',
@@ -79,7 +79,7 @@ describe('Calculate draw', () => {
     const squares = ['O', 'X', null, 
                      'X', 'O', 'O',
                      'X', 'O', 'X'];
-    expect(calculateWinner(squares))
+    expect(calculateDraw(squares))
       .toStrictEqual({ 'draw': true });
   });
 
@@ -87,7 +87,7 @@ describe('Calculate draw', () => {
     const squares = ['X', 'X', 'O', 
                      'O', 'O', 'X',
                      null,'O', 'X'];
-    expect(calculateWinner(squares))
+    expect(calculateDraw(squares))
       .toStrictEqual({ 'draw': true });
   });
 
@@ -95,7 +95,7 @@ describe('Calculate draw', () => {
     const squares = ['X', 'O', 'O', 
                      'O', 'X', 'X',
                      'X', null,'O'];
-    expect(calculateWinner(squares))
+    expect(calculateDraw(squares))
       .toStrictEqual({ 'draw': true });
   });
 
@@ -103,7 +103,15 @@ describe('Calculate draw', () => {
     const squares = [null, 'O', 'X',
                       'X', 'O', 'X',
                       'O', 'X', 'O'];
-    expect(calculateWinner(squares))
+    expect(calculateDraw(squares))
+      .toStrictEqual({ 'draw': true });
+  });
+
+  it('calculates draw correctly for full board', () => {
+    const squares = [ 'X', 'O', 'X',
+                      'X', 'O', 'X',
+                      'O', 'X', 'O'];
+    expect(calculateDraw(squares))
       .toStrictEqual({ 'draw': true });
   });
 });
