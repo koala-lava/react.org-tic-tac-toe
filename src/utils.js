@@ -9,27 +9,27 @@ export function calculateWinner(squares) {
     [0, 4, 8],
     [2, 4, 6],
   ];
-  function calculate(squares) {
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-        return {
-          'winner': squares[a],
-          'winningLine': lines[i]
-        };
-      }
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+      return {
+        'winner': squares[a],
+        'winningLine': lines[i]
+      };
     }
   }
-  const result = calculate(squares);
-  if (result) {
-    return result;
-  }
+
+  return {};
+}
+
+export function calculateDraw(squares) {
   const empty = squares.indexOf(null);
-  if (empty != null && squares.indexOf(null, empty + 1) === -1) {
+  //'empty>-2' allows to pass '0 index' as truthy value, not found -1 also ok 
+  if (empty > -2 && squares.indexOf(null, empty + 1) === -1) {
     const test = squares.slice();
-    let draw = false;
+    let draw;
     test[empty] = 'X';
-    if (!calculate(test)) {
+    if (!calculateWinner(test).winner) {
       draw = true;
     }
     if (draw) {
