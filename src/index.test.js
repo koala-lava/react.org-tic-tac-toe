@@ -64,7 +64,7 @@ describe('Calculate winner', () => {
       .toStrictEqual({ 'winner': 'X', 'winningLine': [2, 4, 6] });
   });
 
-  it('calculates for no winner and no draw correctly', () => {
+  it('calculates correctly if no winner', () => {
     const squares = [null, null, 'X',
                      null, null, null,
                      'X',  'O',  'O'];
@@ -113,5 +113,21 @@ describe('Calculate draw', () => {
                       'O', 'X', 'O'];
     expect(calculateDraw(squares))
       .toStrictEqual({ 'draw': true });
+  });
+
+  it('calculates correctly if no draw' , () => {
+    const squares = [ 'X', 'O', null,
+                      'X', null, 'X',
+                      'O', 'X', 'O'];
+    expect(calculateDraw(squares))
+      .toStrictEqual({});
+  });
+
+  it('calculates correctly if no draw for full board' , () => {
+    const squares = ['X', 'O', 'X',
+                     'O', 'X', 'O',
+                     'O', 'X', 'X'];
+    expect(calculateDraw(squares))
+      .toStrictEqual({});
   });
 });
