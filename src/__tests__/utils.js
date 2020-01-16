@@ -1,4 +1,5 @@
-import { calculateWinner, calculateDraw } from './utils';
+import { calculateWinner, calculateDraw } from '../utils';
+
 describe('Calculate winner', () => {
   it('calculates first winning row correctly for "X"', () => {
     const squares = ['X',  'X',  'X',
@@ -123,6 +124,14 @@ describe('Calculate draw', () => {
       .toStrictEqual({});
   });
 
+  it('calculates correctly if no draw for full board' , () => {
+    const squares = ['X', 'O', 'X',
+                     'O', 'X', 'O',
+                     'O', 'X', 'X'];
+    expect(calculateDraw(squares))
+      .toStrictEqual({});
+  });
+  
   it('calculates correctly if no draw for full board' , () => {
     const squares = ['X', 'O', 'X',
                      'O', 'X', 'O',
