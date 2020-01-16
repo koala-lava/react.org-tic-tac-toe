@@ -37,7 +37,12 @@
     "globals": [
       "expect",
       "test",
-      "it"
+      "it",
+      "describe"
+    ],
+    "ignore": [
+      "public/",
+      "/src/__tests__/utils.js"
     ]
   }
 }
